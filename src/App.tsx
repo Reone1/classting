@@ -1,26 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
+import Intro from "./pages/Intro";
+import Question from "./pages/Question";
+import Result from "./pages/Result";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Intro />} />
+        <Route path="/quizs/*" element={<Question />}>
+          <Route path=":id" element={<Post />} />
+        </Route>
+        <Route path="/result" element={<Result />} />
+        <Route path="/*" element={<div>not found</div>}></Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
+const Post = () => {
+  const { id } = useParams();
+  return <div>{id}</div>;
+};
 export default App;
