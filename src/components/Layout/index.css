@@ -7,26 +7,32 @@ body,
 #root {
   margin: 0;
   padding: 0;
-  height: 100vh;
-  width: 100vw;
-}
-
-.default-layout-background {
-  background-color: rgba(110, 74, 135, 0.6);
   width: 100%;
   height: 100%;
 }
+#root {
+  overflow: hidden;
+}
+
+.default-layout-background {
+  padding: 40px 0;
+  background-color: rgba(110, 74, 135, 0.6);
+  height: 100%;
+  overflow-y: scroll;
+  transition: heigth 2s ease-in;
+}
+
 .default-layout-flex {
   line-height: 1.42;
   margin: 0 auto;
   width: fit-content;
-  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
 .default-layout-box {
+  min-width: 876px;
   border: 1px solid black;
   border-radius: 7px;
   background-color: white;
@@ -35,4 +41,16 @@ body,
   max-width: 980px;
   padding: 5% 10%;
   display: block;
+}
+
+label:hover {
+  color: rgba(29, 27, 170, 0.803);
+  font-weight: bold;
+}
+.open-button {
+  cursor: pointer;
+  transition: all ease-in 0.2s;
+}
+.open-button:hover {
+  padding-left: 14px;
 }

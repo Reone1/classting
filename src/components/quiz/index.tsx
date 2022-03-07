@@ -26,6 +26,11 @@ const QuizComponent = ({
               key={answer}
               style={{
                 marginBottom: "7px",
+                fontSize: "18px",
+                fontWeight:
+                  checked && answer === quiz.correct_answer
+                    ? "bold"
+                    : "inherit",
                 color:
                   checked && answer === quiz.correct_answer
                     ? "green"
