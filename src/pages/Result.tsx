@@ -1,9 +1,19 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Button from "../components/buttons/Button";
 import DefaultLayout from "../components/Layout";
 import { Quizs } from "../types/data";
 
+import { Doughnut } from "react-chartjs-2";
+import { Chart, ArcElement, Title, Legend, Tooltip } from "chart.js";
+Chart.register(ArcElement, Legend, Tooltip, Title);
+
+const divStyle: React.CSSProperties = {
+  marginTop: "20px",
+  textAlign: "center",
+};
+
 const Result = () => {
+  const [open, setOpen] = useState(false);
   const answers = useMemo<string[]>(() => {
     return JSON.parse(localStorage.getItem("answers") as string);
   }, []);
@@ -17,44 +27,59 @@ const Result = () => {
     for (let i = 0; i < answers.length; i++) {
       if (answers[i] === quizs[i].correct_answer) count++;
     }
-    console.log(quizs);
     return (count / quizs.length) * 100;
   }, [quizs, answers]);
+
+  const chartData = useMemo(() => {
+    return {
+      labels: ["정답", "오답"],
+      datasets: [
+        {
+          label: "정오답 비율",
+          data: [10 * (ratio / 100), (100 - ratio) / 10],
+          backgroundColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)"],
+          hoverOffset: 4,
+        },
+      ],
+    };
+  }, [ratio]);
 
   return !answers ? (
     <DefaultLayout>not answers data</DefaultLayout>
   ) : (
     <DefaultLayout>
-      <div style={{ display: "flex", flexDirection: "row" }}>
-        <div>
-          <div>quizs</div>
-
-          {quizs.map((el) => (
-            <div>{el.correct_answer}</div>
-          ))}
-        </div>
-        <div>
-          <div>answers</div>
-          {answers.map((el) => (
-            <div>{el}</div>
-          ))}
-        </div>
-        <div>
-          <div>iscorrect</div>
-          {quizs.map((el, index) => {
-            const isCorrect = el.correct_answer === answers[index];
-            return <div>{isCorrect ? "true" : "false"}</div>;
-          })}
-        </div>
-
-        <div>
-          <div>incorrect Quizs</div>
+      <div>
+        <Doughnut data={chartData} />
+        <div style={divStyle}>ratio : {ratio} %</div>
+      </div>
+      <section>
+        <h2>
+          내가 틀린 문제{" "}
+          <span
+            className="open-button"
+            onClick={() => setOpen((state) => !state)}
+          >
+            &gt;
+          </span>
+        </h2>
+        <div
+          style={{
+            display: open ? "block" : "none",
+          }}
+        >
           {quizs
             .map((el, idx) => {
               return (
                 <div key={idx}>
                   {idx + 1}
-                  <div dangerouslySetInnerHTML={{ __html: el.question }}></div>
+                  {".      "}
+                  <span
+                    dangerouslySetInnerHTML={{ __html: el.question }}
+                  ></span>
+                  <ul>
+                    <li>문제의 정답 : {el.correct_answer}</li>
+                    <li>내가 고른 정답: {answers[idx]}</li>
+                  </ul>
                 </div>
               );
             })
@@ -62,7 +87,8 @@ const Result = () => {
               return quizs[Number(el.key)].correct_answer !== answers[i];
             })}
         </div>
-        <div> ratio : {ratio} %</div>
+      </section>
+      <div style={divStyle}>
         <Button text="Restart" />
       </div>
     </DefaultLayout>
