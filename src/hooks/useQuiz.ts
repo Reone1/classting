@@ -16,7 +16,7 @@ const useQuiz = () => {
 
   useEffect(() => {
     if (quizs === null) {
-      getQuiz().then((res) => {
+      getQuiz({}).then((res) => {
         localStorage.setItem("quizs", JSON.stringify(res.data.results));
         setQuizs(res.data.results);
       });

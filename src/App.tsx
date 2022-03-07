@@ -9,7 +9,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Intro />} />
         <Route path="/quizs/*" element={<Question />}>
-          <Route path=":id" element={<Post />} />
+          <Route path=":id" />
         </Route>
         <Route path="/result" element={<Result />} />
         <Route path="/*" element={<div>not found</div>}></Route>
@@ -17,9 +17,4 @@ function App() {
     </BrowserRouter>
   );
 }
-
-const Post = () => {
-  const { id } = useParams();
-  return <div>{id}</div>;
-};
 export default App;
